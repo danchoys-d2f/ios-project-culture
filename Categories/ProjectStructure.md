@@ -6,10 +6,10 @@ As D2F does both iOS and Android, it's natural to have a similar structure betwe
 
 * [Naming](#naming)
 * [Hierarchy](#hierarchy)
-  * [Model/](#group-hierarchy-model)
-  * [Components/](#group-hierarchy-components)
-  * [Modules/](#group-hierarchy-modules)
-  * [Resources/](#group-hierarchy-resources)
+  * [Model](#group-hierarchy-model)
+  * [Components](#group-hierarchy-components)
+  * [Modules](#group-hierarchy-modules)
+  * [Resources](#group-hierarchy-resources)
   * [Supporting Files](#group-hierarchy-supporting-files)
 * [Sort order](#sort-order)
 
@@ -59,7 +59,7 @@ Frameworks/
 
 Lets walk over these groups and discuss some of them in a more detail.
 
-#### <a id="group-hierarchy-model"></a>Model/
+#### <a id="group-hierarchy-model"></a>Model
 
 This group refers to __M__ in the popular __MV*__ patterns like __MVC__, __MVP__ or __MVVM__. 
 
@@ -84,11 +84,11 @@ extension User {
 }
 ```
 
-#### <a id="group-hierarchy-components"></a>Components/
+#### <a id="group-hierarchy-components"></a>Components
 
-This group has all the reusable stuff, that is shared between the different modules. If you think that some views or view controllers may appear in different places of your app, consider putting them into __Components/Views/__ and __Components/View controllers/__ respectively. Same applies to the other subgroups. If your new UI-related declaration does not fit into any of the existing categories, it should go into __Components/Utilities/__
+This group has all the reusable stuff, that is shared between the different modules. If you think that some views or view controllers may appear in different places of your app, consider putting them into __Components/Views/__ and __Components/View Controllers/__ respectively. Same applies to the other subgroups. If your new UI-related declaration does not fit into any of the existing categories, it should go into __Components/Utilities/__
 
-#### <a id="group-hierarchy-modules"></a>Modules/
+#### <a id="group-hierarchy-modules"></a>Modules
 
 Here is where your application user interfaces are declared and implemented. Depending on the size of the app, this can be organized differently; following is just an example of how a single module can look like in a mid-sized project containing 10-15 screens.
 
@@ -105,11 +105,11 @@ Modules/
 
 Here each module has a dedicated storyboard, at least one view controller and optionally a view subgroup, where local to the module views are declared.
 
-#### <a id="group-hierarchy-resources"></a>Resources/
+#### <a id="group-hierarchy-resources"></a>Resources
 
 Thats somewhat similar to `res` on Android. In this group you will find the image assets, custom fonts, localization files, custom configuration plists and so on.
 
-#### <a id="group-hierarchy-supporting-files"></a>Supporting Files/
+#### <a id="group-hierarchy-supporting-files"></a>Supporting Files
 
 Being more of a legacy, rather than direct need, this group contains the Info.plist, LaunchScreen.storyboard and sometimes the entitlements file. This is the only group that is not backed by a directory in the file system.
 
@@ -118,5 +118,5 @@ Being more of a legacy, rather than direct need, this group contains the Info.pl
 All groups, containing lists of homogeneous items should be sorted alphabetically. This includes, but is not limited by the following:
 
 * All subgroups of the __Components/__ group
-* __Modules__
-* __Resources__
+* __Modules/__
+* __Resources/__

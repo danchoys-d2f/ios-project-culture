@@ -120,3 +120,7 @@ All groups, containing lists of homogeneous items should be sorted alphabeticall
 * All subgroups of the __Components/__ group
 * __Modules/__
 * __Resources/__
+
+### Credits
+
+Ⓒ Devoteam Digital Factory 2018

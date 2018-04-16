@@ -12,6 +12,6 @@ We all work together on building awesome stuff, but in order to be efficient we 
 * [Snippets](Categories/Snippets.md)
 * [Helpful links](Categories/HelpfulLinks.md)
 
-### Credits
+## Credits
 
 Ⓒ Devoteam Digital Factory 2018

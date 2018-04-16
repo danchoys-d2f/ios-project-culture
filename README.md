@@ -7,7 +7,7 @@ We all work together on building awesome stuff, but in order to be efficient we 
 * [Project setup](Categories/ProjectSetup.md)
 * [Project structure](Categories/ProjectStructure.md)
 * [Architecture](Categories/Architecture.md)
-* [Style guide](Categories/Styleguide.md)
+* [Style guide](Categories/StyleGuide.md)
 * Layout
 * Unit/UI testing
 * [Snippets](Categories/Snippets.md)

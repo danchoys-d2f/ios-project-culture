@@ -6,12 +6,12 @@ We all work together on building awesome stuff, but in order to be efficient we 
 
 * [Project setup](Categories/ProjectSetup.md)
 * [Project structure](Categories/ProjectStructure.md)
-* [Architecture](Categories/Architecture.md)
-* [Style guide](Categories/Styleguide.md)
+* Architecture
+* Style guide
 * Layout
 * Unit/UI testing
 * [Snippets](Categories/Snippets.md)
-* [Helpful links](Categories/HelpfulLinks.md)
+* Helpful links
 
 ## Credits
 

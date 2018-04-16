@@ -5,14 +5,13 @@ As D2F does both iOS and Android, it's natural to have a similar structure betwe
 ## Table of contents
 
 * [Naming](#naming)
-* [Group hierarchy](#group-hierarchy)
+* [Hierarchy](#hierarchy)
   * [Model/](#group-hierarchy-model)
   * [Components/](#group-hierarchy-components)
   * [Modules/](#group-hierarchy-modules)
   * [Resources/](#group-hierarchy-resources)
   * [Supporting Files](#group-hierarchy-supporting-files)
 * [Sort order](#sort-order)
-  
 
 ## Naming
 
@@ -36,7 +35,7 @@ ViewControllers
 01_view_controllers
 ```
 
-## Group hierarchy
+## Hierarchy
 
 Suggested is the following group hierarchy:
 

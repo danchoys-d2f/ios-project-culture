@@ -121,6 +121,6 @@ All groups, containing lists of homogeneous items should be sorted alphabeticall
 * __Modules/__
 * __Resources/__
 
-### Credits
+## Credits
 
 Ⓒ Devoteam Digital Factory 2018

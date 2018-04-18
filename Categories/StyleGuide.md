@@ -11,6 +11,9 @@ This page tries to give a comprehensive description of the code culture that is 
   * [Spacing](#spacing)
   * [Line breaks](#line-breaks)
   * [Optionals](#optionals)
+  * [Access control](#access-control)
+* [Linting](#linting)
+* [Example](#exaple)
 
 ## Basics
 
@@ -174,6 +177,19 @@ label.text = String(describing: value!)
 
 > __Note__: There are some rare cases when force unwrapping is inevitable, but most of the time it is when some Objc APIs are returning an optional, when they shouldn't. It is still a good idea though to use `if let` there as well.
 
+### Access control
+
+We always hide the implementation details of our objects, so please take the following tips into account when implementing your next object:
+
+* We always mark `@IBAction`s as `private` as they should never called directly or exposed to the class consumers.
+* We mark `@IBOutlet`s as `private` in view controllers and `private(set)` in views.
+* We mark publicly read-only properties `private(set)` and put them into `Public properties` section.
+
+## Linting
+
+We are very excited to reduce the headache of manually maintaining the consistent coding style by adding the [SwiftLint](https://github.com/realm/SwiftLint) into our projects. But is hasn't happened yet, so:
+
+[TBD]
 
 ## Credits
 

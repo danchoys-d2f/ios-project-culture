@@ -191,6 +191,10 @@ We are very excited to reduce the headache of manually maintaining the consisten
 
 [TBD]
 
+## Example
+
+In [this gist](https://gist.github.com/danchoys-d2f/e3bb6623e38276383cbba5fc27cd89b4) you will find a complete implementation of a view controller built with the above rules. Note that code is referencing a third-party library, so please focus on the style rather than architecture.
+
 ## Credits
 
 Ⓒ Devoteam Digital Factory 2018

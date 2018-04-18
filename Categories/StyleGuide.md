@@ -181,8 +181,8 @@ label.text = String(describing: value!)
 
 We always hide the implementation details of our objects, so please take the following tips into account when implementing your next object:
 
-* We always mark `@IBAction`s as `private` as they should never called directly or exposed to the class consumers.
-* We mark `@IBOutlet`s as `private` in view controllers and `private(set)` in views.
+* We always mark `@IBAction`'s as `private` as they should never called directly or exposed to the class consumers.
+* We mark `@IBOutlet`'s as `private` in view controllers and `private(set)` in views.
 * We mark publicly read-only properties `private(set)` and put them into `Public properties` section.
 
 ## Linting

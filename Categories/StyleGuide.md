@@ -138,7 +138,7 @@ class MyClass {
 **Not preferred:**
 ```swift
 class MyClass {
-    // MARK: - Public API
+    // MARK: - Public properties
     var numberOfRows: Int = 0
 
     var reloadsAutomatically: Bool = true

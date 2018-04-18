@@ -9,6 +9,7 @@ We all work together on building awesome stuff, but in order to be efficient we 
 * Architecture
 * [Style guide](Categories/StyleGuide.md)
 * Layout
+* Localization
 * Unit/UI testing
 * [Snippets](Categories/Snippets.md)
 * [Helpful links](Categories/HelpfulLinks.md)

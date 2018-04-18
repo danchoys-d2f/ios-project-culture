@@ -183,7 +183,7 @@ We always hide the implementation details of our objects, so please take the fol
 
 * We always mark `@IBAction`'s as `private` as they should never called directly or exposed to the class consumers.
 * We mark `@IBOutlet`'s as `private` in view controllers and `private(set)` in views.
-* We mark publicly read-only properties `private(set)` and put them into `Public properties` section.
+* We mark publicly read-only properties `private(set)` and put them into __Public properties__ section.
 
 ## Linting
 

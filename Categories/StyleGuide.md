@@ -116,7 +116,7 @@ We use one and only one empty line to separate two members of a type from each o
 ```swift
 class MyClass {
 
-    // MARK: - Public API
+    // MARK: - Public properties
 
     var numberOfRows: Int = 0
 

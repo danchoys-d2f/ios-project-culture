@@ -69,7 +69,7 @@ It contains the API client, server details, model objects, mapping code, provide
 
 It is a good approach to treat the entire __Model__ group as a self-contained framework, that is imported from the UI layer. Sometimes it can even be extracted as a separate dynamic framework target to be used, for example, in both iOS and tvOS targets.
 
-Usually it is beneficial to add UI-related properties or helper methods to the model objects. You shouldn't do it though by adding your properties directly to the model object. You shall declare an extension and put it into __Components/Extensions/__ group instead. Example:
+Often it is beneficial to add UI-related properties or helper methods to the model objects. You shouldn't do it though by adding your properties directly to the model object. You shall declare an extension and put it into __Components/Extensions/__ group instead. Example:
 
 ```swift
 // User.swift
@@ -117,7 +117,7 @@ Being more of a legacy, rather than direct need, this group contains the Info.pl
 
 ## Sort order
 
-All groups, containing lists of homogeneous items should be sorted alphabetically. This includes, but is not limited by the following:
+All groups, containing lists of homogeneous items should be sorted alphabetically. This includes, but is not limited to the following:
 
 * All subgroups of the __Components/__ group
 * __Modules/__

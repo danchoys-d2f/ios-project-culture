@@ -110,7 +110,7 @@ func drawDefaultImage() {
 }
 ```
 
-We use one and only one empty line to separate two type's members from each other and from the enclosing braces.
+We use one and only one empty line to separate two members of a type from each other and from the enclosing braces.
 
 **Preferred:**
 ```swift

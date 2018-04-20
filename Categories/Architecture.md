@@ -143,11 +143,11 @@ Some views, like text fields, break the flow by changing their state directly. T
 
 First of all, unless you specify a custom class for its view (which nobody does), it is also a view itself in terms, described above.
 
-The difference is that they are slightly more intelligent, then `UIView`'s:
+The difference is that they are slightly more intelligent, than `UIView`'s:
 
 * They create and keep a strong reference to the presenter;
 * They receive the lifecycle events and perform segues;
-* In case of bindings they perform the binding between the presenter's observables and the subviews;
+* In case of bindings they perform the binding between the observables of the presenter and the subviews;
 * They perform __formatting__ of data, received from the presenter;
 * They manage localization;
 
@@ -155,7 +155,7 @@ Lets focus on the last two bullets:
 
 #### Formatting and localization
 
-It is a matter of preference to decide whether the __Presnter__ or the __View__ is responsible for making the user-facing strings out of data. In my opinion if this thing is done in the presenter, it will naturally reveal too many details about the view to the presenter, which will hurt the entire concept.
+It is a matter of preference to decide whether the __Presnter__ or the __View__ is responsible for making the user-facing strings out of data. In my opinion if this is done in the presenter, it will naturally reveal too many details about the view to the presenter, which will hurt the entire concept.
 
 If formatting, which includes combining two string into one, is performed in the view controller, it is not possible (and not logical) to apply localization in the presenter, therefore this task should also be done in the view controller.
 
@@ -168,7 +168,7 @@ This breaks the defined [Flow](#flow) by introducing multiple paths through whic
 To solve this problem we have (at least =]) two options:
 
 * Modify the behaviour of all such elements, making them only send the events without changing their state.
-* Make sure the __Reducer__ gets the event, containing the new value before the user sees the change and either synchronizes itself with it or resets the view's state with a new appropriate value.
+* Make sure the __Reducer__ gets the event, containing the new value before the user sees the change and either synchronizes itself with it or resets the view's state to a new appropriate value.
 
 Both solutions are completely viable, but with the use of bindings it is particularly easy to achieve the second one. Beneficial here is that you don't need to fight with the platform which is usually a good thing.
 
@@ -176,13 +176,13 @@ Both solutions are completely viable, but with the use of bindings it is particu
 
 ## Presenter
 
-Presenter as mentioned in the [pattern section](#pattern) is mediating between the __Model__ and the __View__. Their main purpose is updating the model and the view's state based on the incoming events. If we recap the diagram from the [flow section](#section), presenter will be the __Reducer__.
+Presenter as mentioned in the [pattern section](#pattern) is mediating between the __Model__ and the __View__. Its main purpose is updating the model and the view's state based on the incoming events. If we recap the diagram from the [flow section](#flow), presenter will be the __Reducer__.
 
-So this is what a presenter does:
+This is what a presenter does:
 
 * Listens to the view and model events;
 * Updates the model with new data;
-* Transforms the model data into light-weigh structures to be consumed by the view;
+* Transforms the model data into light-weight structures to be consumed by the view;
 * Updates the view's state;
 
 What presenter __does not__ do is:
@@ -193,26 +193,26 @@ What presenter __does not__ do is:
 
 There are different ways to set a link between the layers:
 
-1. Through key-value observation.
-1. Through the notification center.
-1. Through delegation.
-1. Using FRP/bindings.
+1. Key-value observing.
+1. Notification center.
+1. Delegation pattern.
+1. FRP/bindings.
 
 Arguably the easiest and cleanest way is to observe the model changes from the presenter using FRP and to expose its own observables, that are later bound to the views by the view controller.
 
-Sometimes a presenter is called a view model. Accurately speaking, they are not exactly the same thing, but in most cases are performing a similar role.
+Sometimes a presenter is called a view model. Accurately speaking, they are not exactly the same thing, but in most cases are playing a similar role.
 
 ## Dependency Injection
 
-Coming mostly from the Android development world, this simple yet powerful technique allows to make your app more dynamic and your code more reusable.
+Coming mostly from the Android development world, this simple yet powerful technique allows to make your app more dynamic and your code more reusable and testable.
 
-> "Dependency Injection" is a 25-dollar term for a 5-cent concept. - James Shore
+> "Dependency Injection" is a 25-dollar term for a 5-cent concept. - __James Shore__
 
-To cut a long story short Dependency Injection (or shortly DI) is just passing all the dependencies the object needs from the outside. There are different types of DI, including constructor injection, property injection, function injection.
+To cut a long story short Dependency Injection (or shortly DI) is just passing all the dependencies the object needs from the outside. There are different types of DI, including constructor injection, property injection and function injection.
 
 As usual, the [Helpful Links](./HelpfulLinks.md) contain nice references that will help you learn the approach.
 
-This is an example of an class, that is declared using the DI approach:
+This is an example of a class, that uses the DI approach:
 
 ```swift
 class UserManager {
@@ -236,13 +236,13 @@ class UserManager {
 }
 ```
 
-Here we do not instantiate the provider in our manager, but instead we expect it to be passed during the manager's creation. Same for logger, but to simplify things we provide a reasonable default right in the initializer. Alternatively we could declare an extension, that adds a convenience initializer, that accepts fewer arguments, passing some defaults to the designated one.
+Here we do not instantiate the provider in our manager, but instead we expect it to be passed during the manager's creation. Same for logger, but to simplify things we provide a reasonable default right in the initializer. Alternatively we could declare an extension, that adds a convenience initializer, that accepts fewer arguments and passes some defaults to the designated one.
 
-With all the model objects being created based on other objects, it becomes natural to ask who is responsible for all this assembling. As usual the answer depends on the project and its scale, but it is quite OK to take the same approach as it doesn't add much of the overhead. And this is called __Assemblies__.
+With all the model objects being created based on other objects, it becomes natural to ask who is responsible for all this assembling. As usual the answer depends on the project and its scale, but it is quite OK to take the same approach if it doesn't add too much overhead. And it is called __Assemblies__.
 
 ### Assemblies
 
-An assembly is simply a class that builds the model objects, injecting them into each other and provides access to them from the outside. In every app there shall be at least one assembly, that contains objects, that are singletons by nature (e.g. the camera manager) or by design. Lets call it the `CoreComponentsAssembly`. Here is an example of it:
+An assembly is simply a class that builds the model objects, injecting them into each other and provides access to them. In every app there shall be at least one assembly, that contains objects, that are singletons by nature (e.g. the camera manager) or by design. Lets call it the `CoreComponentsAssembly`. Here is an example of it:
 
 ```swift
 // CoreComponentsAssembly.swift
@@ -277,9 +277,9 @@ userManager.retrieveUsers { result in
 }
 ```
 
-Notice that from the `UserManager`'s point of view it is not a singleton. But we extend the type with a static `default` property, that returns the value, stored in the core components assembly, allowing for singleton access from the other layers.
+Notice that from the `UserManager`'s point of view it is not a singleton. But we've extended the type with a static `default` property, that returns the value, stored in the core components assembly, allowing for singleton access from the other layers.
 
-If a project is simple and small, it is usually enough to have just this static assembly, but when the project grows, it becomes more difficult to manage it and there appears a need for a different assembly, that contains objects, created based on some value. For instance, it can be an assembly, containing all the managers, that manage objects, related to a specific user's session. Then such an assembly must be created with a hypothetical `Session` object. See the following example:
+If a project is small and simple, it is usually enough to have just this static assembly, but as the project grows, there appears a need for a different assembly, created based on some value. For instance, it can be an assembly, containing all the managers, that maintain objects, related to a specific user session. Such an assembly must be created with a hypothetical `Session` object. Refer to the following example:
 
 ```swift
 // CoreComponentsAssembly.swift
@@ -330,7 +330,7 @@ assembly.creditHistoryManager.retrieveCreditHistory { result in
 }
 ```
 
-In this example the core components assembly allows to create another assembly, but accepting additional information, which is the session. It also passes the other required object to the new assembly, same ones that it has itself. The new assembly uses this additional data to configure its providers and managers slightly different.
+In this example the core components assembly allows to create another assembly, accepting additional information, which is the session. It also passes the other required objects to the new assembly, same ones that it has itself. The new assembly uses this additional data to configure its providers and managers in a user-specific way.
 
 Because the new assembly is no longer static, someone needs to take ownership of it, otherwise it will be cleaned up. And this problem brings us to the next topic.
 

@@ -129,7 +129,7 @@ class ButtonView: UIView {
 
 #### UIView and UIViewController
 
-It is ultimately important to understand the difference between these two and use both to take the most out of the platform.
+It is ultimately important to understand the difference between these two and use both to take most of the platform.
 
 **What is a UIView?**
 

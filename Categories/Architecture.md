@@ -15,6 +15,7 @@ This page is updated over time to reflect changes to the recommended approach.
   * [UIView and UIViewController](#uiview-and-uiviewcontroller)
   * [Formatting and localization](#formatting-and-localization)
   * [Self-updating views](#self-updating-views)
+* [Presenter](#presenter)
 
 ## Pattern
 
@@ -168,6 +169,34 @@ To solve this problem we have (at least =]) two options:
 Both solutions are completely viable, but with the use of bindings it is particularly easy to achieve the second one. Beneficial here is that you don't need to fight with the platform which is usually a good thing.
 
 [This page](https://reactjs.org/docs/forms.html) describes how the very same problem is solved in React.
+
+## Presenter
+
+Presenter as mentioned in the [pattern section](#pattern) is mediating between the __Model__ and the __View__. Their main purpose is updating the model and the view's state based on the incoming events. If we recap the diagram from the [flow section](#section), presenter will be the __Reducer__.
+
+So this is what a presenter does:
+
+* Listens to the view and model events;
+* Updates the model with new data;
+* Transforms the model data into light-weigh structures to be consumed by the view;
+* Updates the view's state;
+
+What presenter __does not__ do is:
+
+* Observing the view's lifecycle events (except maybe for the `viewDidLoad`);
+* Producing the user-facing strings;
+* Directly manipulating views;
+
+There are different ways to set a link between the layers:
+
+1. Through key-value observation.
+1. Through the notification center.
+1. Through delegation.
+1. Using FRP/bindings.
+
+Arguably the easiest and cleanest way is to observe the model changes from the presenter using FRP and to expose its own observables, that are later bound to the views by the view controller.
+
+Sometimes a presenter is called a view model. Accurately speaking, they are not exactly the same thing, but in most cases are performing a similar role.
 
 ## Credits
 

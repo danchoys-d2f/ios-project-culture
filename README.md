@@ -6,7 +6,7 @@ We all work together on building awesome stuff, but in order to be efficient we 
 
 * [Project setup](Categories/ProjectSetup.md)
 * [Project structure](Categories/ProjectStructure.md)
-* Architecture
+* [Architecture](Categories/Architecture.md)
 * [Style guide](Categories/StyleGuide.md)
 * Layout
 * Localization

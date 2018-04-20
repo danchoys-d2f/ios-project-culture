@@ -17,6 +17,9 @@ This page is updated over time to reflect changes to the recommended approach.
   * [Self-updating views](#self-updating-views)
 * [Presenter](#presenter)
 * [Dependency Injection](#dependency-injection)
+  * [Assemblies](#assemblies)
+  * [Assembly ownership](#assembly-ownership)
+  * [Injection and system-created objects](#injection-and-system-created-objects)
 
 ## Pattern
 
@@ -239,9 +242,10 @@ With all the model objects being created based on other objects, it becomes natu
 
 ### Assemblies
 
-An assembly is simply a class that builds the model object, injecting them into each other and provides access to them from the outside. In every app there shall be an assembly, that contains objects, that are meant to be singular (e.g. classes that representing real-life objects, like camera). Lets call it CoreComponentsAssembly. Here is an example of it:
+An assembly is simply a class that builds the model objects, injecting them into each other and provides access to them from the outside. In every app there shall be at least one assembly, that contains objects, that are singletons by nature (e.g. the camera manager) or by design. Lets call it the `CoreComponentsAssembly`. Here is an example of it:
 
 ```swift
+// CoreComponentsAssembly.swift
 class CoreComponentsAssembly {
 
     static let userManager: UserManager = UserManager(
@@ -266,6 +270,11 @@ extension UserManager {
     }
 
 }
+// Example
+let userManager = UserManager.default
+userManager.retrieveUsers { result in
+    <...>
+}
 ```
 
 Notice that from the `UserManager`'s point of view it is not a singleton. But we extend the type with a static `default` property, that returns the value, stored in the core components assembly, allowing for singleton access from the other layers.
@@ -287,7 +296,6 @@ class CoreComponentsAssembly {
     <...>
 
 }
-
 // AuthenticatedComponentsAssembly.swift
 class AuthenticatedComponentsAssembly {
 
@@ -314,8 +322,51 @@ class AuthenticatedComponentsAssembly {
     }
 
 }
+// Example
+let session: Session = createSession() // Shouldn't be like that in real life :D
+let assembly = CoreComponentsAssembly.authenticatedComponentsAssembly(with: session)
+assembly.creditHistoryManager.retrieveCreditHistory { result in
+    // Handle the result
+}
+```
 
+In this example the core components assembly allows to create another assembly, but accepting additional information, which is the session. It also passes the other required object to the new assembly, same ones that it has itself. The new assembly uses this additional data to configure its providers and managers slightly different.
 
+Because the new assembly is no longer static, someone needs to take ownership of it, otherwise it will be cleaned up. And this problem brings us to the next topic.
+
+### Assembly ownership
+
+![Assembly ownership](../Images/assy-ownership.png)
+
+The diagram above shows how the main objects refer to each other in an iOS app. It is clear from the diagram, that the view controllers take a very special space in the ownership stack being second to the window in terms of importance.
+
+Therefore it is very convenient and witty to set the view controller as the assembly's owner. It would then pass that assembly down the view controller navigation chain, but once the first controller, who is the owner, gets deallocated, the assembly will be cleaned up as well, thus making it as easy as ABC to clean up the user's session - you just need to show the login page and that's it.
+
+Passing the assembly down the navigation chain can be done in different ways, for instance, using `prepare(for:sender:)`:
+
+```swift
+override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    super.prepare(for: segue, sender: sender)
+    switch segue.identifier {
+    case SegueIdentifiers.toNewPage:
+        let controller = segue.destination(typed: NewPageViewController.self) // This is a custom one
+        controller?.assembly = self.assembly
+    default: break
+    }
+}
+```
+
+### Injection and system-created objects
+
+When you are not responsible for creating an object, obviously, you won't be able to pass a dependency through a constructor. For example, this is the case for view controllers.
+
+Therefore you must declare a public implicitly unwrapped optional property and make sure it is property set by the time it is used. It's OK here to use an unwrapped optional, because failure to pass a dependency is a serious issue and a crash would let you find it out faster.
+
+```swift
+class MyViewController {
+    // Needs to be specified before it is accessed
+    var assembly: AuthenticatedComponentsAssembly!
+}
 ```
 
 ## Credits

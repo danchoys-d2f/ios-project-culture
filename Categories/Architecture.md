@@ -9,12 +9,12 @@ This page is updated over time to reflect changes to the recommended approach.
 ## Table of contents
 
 * [Pattern](#pattern)
-  * [Model](#model)
-  * [View](#view)
-    * [Flow](#flow)
-    * [UIView and UIViewController](#uiview-and-uiviewcontroller)
-    * [Formatting and localization](#formatting-and-localization)
-    * [Self-updating views](#self-updating-views)
+* [Model](#model)
+* [View](#view)
+  * [Flow](#flow)
+  * [UIView and UIViewController](#uiview-and-uiviewcontroller)
+  * [Formatting and localization](#formatting-and-localization)
+  * [Self-updating views](#self-updating-views)
 
 ## Pattern
 
@@ -58,7 +58,7 @@ As seen on the first diagram, __View__ owns the __Presenter__, so there is not m
 
 #### Flow
 
-View layer is what our users will actually see, so making it good is critical for every mobile application. A comprehensive overview of different approaches of organizing the data flows is out of scope of this page, so we will cover only the recommended one.
+View layer is what our users will actually see, so making it good is critical for every mobile application. A comprehensive overview of different approaches of organizing the data flows is out of scope for this page, so we will cover only the recommended one.
 
 ![Flow](../Images/flow.png)
 

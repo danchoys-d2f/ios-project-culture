@@ -330,7 +330,7 @@ assembly.creditHistoryManager.retrieveCreditHistory { result in
 }
 ```
 
-In this example the core components assembly allows to create another assembly, accepting additional information, which is the session. It also passes the other required objects to the new assembly, same ones that it has itself. The new assembly uses this additional data to configure its providers and managers in a user-specific way.
+In this example the core components assembly allows to create another assembly, accepting additional information, which is the session. It also passes the other required objects to the new assembly, same ones as it has itself. The new assembly uses this additional data to configure its providers and managers in a user-specific way.
 
 Because the new assembly is no longer static, someone needs to take ownership of it, otherwise it will be cleaned up. And this problem brings us to the next topic.
 
@@ -338,9 +338,9 @@ Because the new assembly is no longer static, someone needs to take ownership of
 
 ![Assembly ownership](../Images/assy-ownership.png)
 
-The diagram above shows how the main objects refer to each other in an iOS app. It is clear from the diagram, that the view controllers take a very special space in the ownership stack being second to the window in terms of importance.
+The diagram above shows how the main objects refer to each other in an iOS app. It is clear from the diagram, that the view controllers take a very special place in the ownership stack being second to the window in terms of importance.
 
-Therefore it is very convenient and witty to set the view controller as the assembly's owner. It would then pass that assembly down the view controller navigation chain, but once the first controller, who is the owner, gets deallocated, the assembly will be cleaned up as well, thus making it as easy as ABC to clean up the user's session - you just need to show the login page and that's it.
+Therefore it is very convenient and witty to set the view controller as the assembly's owner. It would then pass that assembly down the view controller containment stack, but once the first controller, which is the owner, gets deallocated, the assembly will be cleaned up as well, thus making it as easy as ABC to clean up the user's session - you just need to show the login page and that's it.
 
 Passing the assembly down the navigation chain can be done in different ways, for instance, using `prepare(for:sender:)`:
 
@@ -360,7 +360,7 @@ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
 When you are not responsible for creating an object, obviously, you won't be able to pass a dependency through a constructor. For example, this is the case for view controllers.
 
-Therefore you must declare a public implicitly unwrapped optional property and make sure it is property set by the time it is used. It's OK here to use an unwrapped optional, because failure to pass a dependency is a serious issue and a crash would let you find it out faster.
+To work around this problem you must declare a public implicitly unwrapped optional property and make sure it is properly set by the time it is first used. It's OK here to use an implicitly unwrapped optional, because failure to pass a dependency is a serious issue and a crash will let you find it out faster.
 
 ```swift
 class MyViewController {

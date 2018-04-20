@@ -8,6 +8,7 @@ Every iOS developer needs to spend time reading and learning to improve his skil
 
 * [General topics](#general-topics)
 * [Auto Layout](#auto-layout)
+* [Functional Reactive Programming](#functional-reactive-programming)
 
 ## General topics
 
@@ -36,6 +37,12 @@ Auto Layout can be troublesome to get right, so please find time to watch the fo
 * WWDC 2015: Mysteries of Auto Layout, Part 2 - https://developer.apple.com/videos/play/wwdc2015/219/
 * WWDC 2016: What's New in Auto Layout - https://developer.apple.com/videos/play/wwdc2016/236/
 * WWDC 2017: Auto Layout Techniques in Interface Builder - https://developer.apple.com/videos/play/wwdc2017/412/
+
+## Functional Reactive Programming
+
+* ReactiveKit framework - https://github.com/DeclarativeHub/ReactiveKit
+
+This light-weight framework contains a __decent__ explanation of how reactive is implemented with swift. Without limitation all the other FRP framework available for iOS in Swift are implemented in a similar way, so take your time and read this one through.
 
 ## Credits
 

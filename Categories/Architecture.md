@@ -16,6 +16,7 @@ This page is updated over time to reflect changes to the recommended approach.
   * [Formatting and localization](#formatting-and-localization)
   * [Self-updating views](#self-updating-views)
 * [Presenter](#presenter)
+* [Dependency Injection](#dependency-injection)
 
 ## Pattern
 
@@ -197,6 +198,125 @@ There are different ways to set a link between the layers:
 Arguably the easiest and cleanest way is to observe the model changes from the presenter using FRP and to expose its own observables, that are later bound to the views by the view controller.
 
 Sometimes a presenter is called a view model. Accurately speaking, they are not exactly the same thing, but in most cases are performing a similar role.
+
+## Dependency Injection
+
+Coming mostly from the Android development world, this simple yet powerful technique allows to make your app more dynamic and your code more reusable.
+
+> "Dependency Injection" is a 25-dollar term for a 5-cent concept. - James Shore
+
+To cut a long story short Dependency Injection (or shortly DI) is just passing all the dependencies the object needs from the outside. There are different types of DI, including constructor injection, property injection, function injection.
+
+As usual, the [Helpful Links](./HelpfulLinks.md) contain nice references that will help you learn the approach.
+
+This is an example of an class, that is declared using the DI approach:
+
+```swift
+class UserManager {
+
+    let provider: WebServiceProvider
+
+    let logger: Logging
+
+    init(provider: WebServiceProvider, logger: Logging = ConsoleLogger.default) {
+        self.provider = provider
+        self.logger = logger
+    }
+
+    func retrieveUsers(with completion: @escaping (Result<User>) -> Void) -> {
+        provider.execute(.getUsers) { result in
+            logger.logInfo(result)
+            completion(result)
+        }
+    }
+
+}
+```
+
+Here we do not instantiate the provider in our manager, but instead we expect it to be passed during the manager's creation. Same for logger, but to simplify things we provide a reasonable default right in the initializer. Alternatively we could declare an extension, that adds a convenience initializer, that accepts fewer arguments, passing some defaults to the designated one.
+
+With all the model objects being created based on other objects, it becomes natural to ask who is responsible for all this assembling. As usual the answer depends on the project and its scale, but it is quite OK to take the same approach as it doesn't add much of the overhead. And this is called __Assemblies__.
+
+### Assemblies
+
+An assembly is simply a class that builds the model object, injecting them into each other and provides access to them from the outside. In every app there shall be an assembly, that contains objects, that are meant to be singular (e.g. classes that representing real-life objects, like camera). Lets call it CoreComponentsAssembly. Here is an example of it:
+
+```swift
+class CoreComponentsAssembly {
+
+    static let userManager: UserManager = UserManager(
+        provider: CoreComponentsAssembly.webServiceProvider,
+        logger: CoreComponentsAssembly.logger
+    )
+
+    static let webServiceProvider: WebServiceProvider = WebServiceProvider(
+        parameters: CoreComponentsAssembly.serverParameters
+    )
+
+    static let logger: Logging = ConsoleLogger.default
+
+    static let serverParameters: ServerParameters = ServerParameters.debug
+
+}
+
+extension UserManager {
+
+    static var default: UserManager {
+        return CoreComponentsAssembly.userManager
+    }
+
+}
+```
+
+Notice that from the `UserManager`'s point of view it is not a singleton. But we extend the type with a static `default` property, that returns the value, stored in the core components assembly, allowing for singleton access from the other layers.
+
+If a project is simple and small, it is usually enough to have just this static assembly, but when the project grows, it becomes more difficult to manage it and there appears a need for a different assembly, that contains objects, created based on some value. For instance, it can be an assembly, containing all the managers, that manage objects, related to a specific user's session. Then such an assembly must be created with a hypothetical `Session` object. See the following example:
+
+```swift
+// CoreComponentsAssembly.swift
+class CoreComponentsAssembly {
+
+    func authenticatedComponentsAssembly(with session: Session) -> AuthenticatedComponentsAssembly {
+        return AuthenticatedComponentsAssembly(
+            session: Session,
+            logger: CoreComponentsAssembly.logger
+            serverParameters: CoreComponentsAssembly.serverParameters
+        )
+    }
+
+    <...>
+
+}
+
+// AuthenticatedComponentsAssembly.swift
+class AuthenticatedComponentsAssembly {
+
+    private(set) lazy var creditHistoryManager: CreditHistoryManager = CreditHistoryManager(
+        provider: self.webServiceProvider,
+        logger: self.logger
+    )
+
+    private(set) lazy var webServiceProvider: WebServiceProvider = WebServiceProvider(
+        parameters: self.serverParameters,
+        token: self.session.token
+    )
+
+    let session: Session
+
+    let logger: Logging
+
+    let serverParameters: ServerParameters
+
+    init(session: Session, logger: Logging, serverParameters: ServerParameters) {
+        self.session = Session
+        self.logger = logger
+        self.serverParameters = serverParameters
+    }
+
+}
+
+
+```
 
 ## Credits
 

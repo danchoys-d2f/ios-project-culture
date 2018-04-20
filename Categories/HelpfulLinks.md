@@ -9,6 +9,7 @@ Every iOS developer needs to spend time reading and learning to improve his skil
 * [General topics](#general-topics)
 * [Auto Layout](#auto-layout)
 * [Functional Reactive Programming](#functional-reactive-programming)
+* [Dependency Injection](#dependency-injection)
 
 ## General topics
 
@@ -43,6 +44,13 @@ Auto Layout can be troublesome to get right, so please find time to watch the fo
 * ReactiveKit framework - https://github.com/DeclarativeHub/ReactiveKit
 
 This light-weight framework contains a __decent__ explanation of how reactive is implemented with swift. Without limitation all the other FRP framework available for iOS in Swift are implemented in a similar way, so take your time and read this one through.
+
+## Dependency Injection
+
+* Dependency Injection - https://www.objc.io/issues/15-testing/dependency-injection/
+* Nuts and Bolts of Dependency Injection in Swift - https://cocoacasts.com/nuts-and-bolts-of-dependency-injection-in-swift/
+* Dependency Injection, iOS and You - https://www.bignerdranch.com/blog/dependency-injection-ios/
+* Swinject - https://github.com/Swinject/Swinject
 
 ## Credits
 

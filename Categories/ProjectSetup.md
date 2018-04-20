@@ -73,7 +73,7 @@ In our projects we are using [CocoaPods](http://cocoadocs.org) to manage the dep
 
 ## Custom configs
 
-In iOS projects custom configuration can be stored in multiple ways. Depending on the amount and sensitivity of this data you are going to choose on of the following:
+In iOS projects custom configuration can be stored in multiple ways. Depending on the amount and sensitivity of this data you are going to choose one of the following:
 
 * __Info.plist__
 

@@ -10,6 +10,11 @@ This page is updated over time to reflect changes to the recommended approach.
 
 * [Pattern](#pattern)
   * [Model](#model)
+  * [View](#view)
+    * [Flow](#flow)
+    * [UIView and UIViewController](#uiview-and-uiviewcontroller)
+    * [Formatting and localization](#formatting-and-localization)
+    * [Self-updating views](#self-updating-views)
 
 ## Pattern
 
@@ -44,6 +49,125 @@ One thing, not represented in the diagram is the __Entities__. These objects are
 Most of the time it is not convenient to have a single data manager, taking care of the entire app's data flows, because such data managers become big and messy. Instead much better is to have multiple data managers, each of which responsible for its own area. The granularity depends on the app, yet as a start you may try having a data manager per entity type.
 
 It is not a good idea to have the data providers create the stores themselves or to have the data managers instantiate the data providers. Instead they need to get such dependencies from the outside at the time of creation. This approach is called __Dependency Injection__ and is covered in more detail in the [corresponding section](#dependency-injection).
+
+### View
+
+View layer is mainly represented by the `UIView` and `UIViewController` classes. This is a very powerful set of tools and when applied wisely, can lead to a clean and easy to understand structure.
+
+As seen on the first diagram, __View__ owns the __Presenter__, so there is not much need to hide the type of the presenter behind a protocol. On the other hand, the presenter sees the view through a protocol.
+
+#### Flow
+
+View layer is what our users will actually see, so making it good is critical for every mobile application. A comprehensive overview of different approaches of organizing the data flows is out of scope of this page, so we will cover only the recommended one.
+
+![Flow](../Images/flow.png)
+
+Basically the idea is to reduce the number of paths through which a view can be changed to just one. It all starts with an __Event__ being emitted: it can be the user tapping some button, or some notification arriving. These events are intercepted by the __Reducer__ that processes them and updates the view's __State__. As soon as the state changes, the view updates itself to match the new state.
+
+This approach influences the way you engineer your presenters and your views.
+
+Example:
+
+**Preferred**
+
+```swift
+class ButtonView: UIView {
+
+    // MARK: - Public properties
+
+    var showsButton: Bool = false { didSet { updateView() } }
+
+    // MARK: - Outlets
+
+    @IBOutlet private(set) weak var button: UIButton!
+
+    @IBOutlet private var buttonLeadingConstraint: NSLayoutConstraint!
+
+    // MARK: - Public API
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        updateView()
+    }
+
+    // MARK: - Private API
+
+    private func updateView() {
+        button.isHidden = !showsButton
+        buttonLeadingConstraint.isActive = showsButton
+    }
+
+}
+```
+
+**Not preferred**
+
+```swift
+class ButtonView: UIView {
+  @IBOutlet private(set) weak var button: UIButton!
+  @IBOutlet private var buttonLeadingConstraint: NSLayoutConstraint!
+
+  override func awakeFromNib() {
+      super.awakeFromNib()
+      showButton()
+  }
+  func showButton() {
+    button.isHidden = false
+    buttonLeadingConstraint.isActive = true
+  }
+  func hideButton() {
+    button.isHidden = true
+    buttonLeadingConstraint.isActive = false
+  }
+}
+```
+
+#### UIView and UIViewController
+
+It is ultimately important to understand the difference between these two and use both to take the most out of the platform.
+
+**What is a UIView?**
+
+In fact this is that "dumb view" everyone is talking about. Views expose state that is changed from the outside and emit user-action-related events (usually through delegation or target-action mechanism, but it can also be achieved using reactive programming).
+
+Some views are just a combination of other views. They don't expose a state property, but rather give access to their outlets.
+
+Some views, like text fields, break the flow by changing their state directly. This problem is described and solved [here](#self-updating-views).
+
+**Ok. What is the UIViewController then?**
+
+First of all, unless you specify a custom class for its view (which nobody does), it is also a view itself in terms, described above.
+
+The difference is that they are slightly more intelligent, then `UIView`'s:
+
+* They create and keep a strong reference to the presenter;
+* They receive the lifecycle events and perform segues;
+* In case of bindings they perform the binding between the presenter's observables and the subviews;
+* They perform __formatting__ of data, received from the presenter;
+* They manage localization;
+
+Lets focus on the last two bullets:
+
+#### Formatting and localization
+
+It is a matter of preference to decide whether the __Presnter__ or the __View__ is responsible for making the user-facing strings out of data. In my opinion if this thing is done in the presenter, it will naturally reveal too many details about the view to the presenter, which will hurt the entire concept.
+
+If formatting, which includes combining two string into one, is performed in the view controller, it is not possible (and not logical) to apply localization in the presenter, therefore this task should also be done in the view controller.
+
+#### Self-updating views
+
+There is a number of system views, that change their state directly in response to the user's actions. For example, `UITextField` changes its `text` property as the user types or `UISegmentedControl` changes the selection when the user taps it. Other examples are `UITextView`, `UISlider`, `UISwitch`, `UIDatePicker`, etc.
+
+This breaks the defined [Flow](#flow) by introducing multiple paths through which a view modification can happen, leading to "multiple sources of truth" and potential bugs.
+
+To solve this problem we have (at least =]) two options:
+
+* Modify the behaviour of all such elements, making them only send the events without changing their state.
+* Make sure the __Reducer__ gets the event, containing the new value before the user sees the change and either synchronizes itself with it or resets the view's state with a new appropriate value.
+
+Both solutions are completely viable, but with the use of bindings it is particularly easy to achieve the second one. Beneficial here is that you don't need to fight with the platform which is usually a good thing.
+
+[This page](https://reactjs.org/docs/forms.html) describes how the very same problem is solved in React.
 
 ## Credits
 

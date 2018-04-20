@@ -13,7 +13,7 @@ This page tries to give a comprehensive description of the code culture that is 
   * [Optionals](#optionals)
   * [Access control](#access-control)
 * [Linting](#linting)
-* [Example](#exaple)
+* [Example](#example)
 
 ## Basics
 
